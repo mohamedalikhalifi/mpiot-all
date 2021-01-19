@@ -1,0 +1,9 @@
+[submodule "mpiot-device/mpiot"]
+	path = mpiot-device/mpiot
+	url = git@github.com:mohamedalikhalifi/mpiot.git
+[submodule "mpiot-server/mpiot-ng"]
+	path = mpiot-server/mpiot-ng
+	url = git@github.com:mohamedalikhalifi/mpiot-ng.git
+[submodule "mpiot-server/mpiot-back"]
+	path = mpiot-server/mpiot-back
+	url = git@github.com:mohamedalikhalifi/mpiot-back.git

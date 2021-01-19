@@ -1,0 +1,26 @@
+version: '3.6'
+services:
+  restapi:
+    build:
+      context: ./mpiot-back
+    depends_on:
+      - messenger
+    environment:
+      - MESSENGER_HOST=messenger
+      - MESSENGER_PORT=6379
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+  messenger:
+    image: redis
+    ports: 
+      - "6379:6379"
+    volumes:
+      - messenger_data:/data
+  forwarder:
+    build:
+      context: ./mpiot-api-forwarder
+    command: usr/local/bin/lt --port 3000 --local-host restapi --subdomain mpiot
+    depends_on:
+      - restapi
+volumes:
+  messenger_data:
