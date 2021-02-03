@@ -10,17 +10,25 @@ services:
       - MESSENGER_PORT=6379
     volumes:
       - ./uploads:/usr/src/app/uploads
+      - ./storage:/usr/src/app/storage
   messenger:
     image: redis
     ports: 
       - "6379:6379"
     volumes:
       - messenger_data:/data
-  forwarder:
+  trainer:
     build:
-      context: ./mpiot-api-forwarder
-    command: usr/local/bin/lt --port 3000 --local-host restapi --subdomain mpiot
+      context: ./mpiot-trainer/container
     depends_on:
-      - restapi
+      - messenger
+    environment:
+      - MESSENGER_HOST=messenger
+      - MESSENGER_PORT=6379
+    volumes:
+      - ./uploads:/uploads
+      - ./shared:/shared
+      - ./mpiot-trainer/service:/service
+    
 volumes:
   messenger_data:

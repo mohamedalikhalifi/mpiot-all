@@ -1,0 +1,6 @@
+setuptools
+dlib
+face-recognition
+imutils
+opencv-contrib-python-headless
+redis

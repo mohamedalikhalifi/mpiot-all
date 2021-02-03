@@ -1,0 +1,41 @@
+version: '3.6'
+services:
+  nfs:
+    image: itsthenetwork/nfs-server-alpine:12
+    container_name: nfs
+    restart: unless-stopped
+    environment:
+      - SHARED_DIRECTORY=/fileshare
+    volumes:
+      - /fileshare:/fileshare
+    ports:
+      - 2049:2049
+  streaming:
+    image: khalifima/services_streaming:latest
+    ports: 
+      - "8000:8000"
+    environment:
+      - MESSENGER_HOST=messenger
+      - MESSENGER_PORT=6379
+    volumes:
+      - type: volume
+        source: fileshare
+        target: /share
+        volume:
+          nocopy: true
+      - /home/pi/mpiot-all/mpiot-device/mpiot/services/streaming/service:/service 
+
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [node.role == worker]
+networks:
+  front:
+  back:
+
+volumes:
+  fileshare:
+    driver_opts:
+      type: "nfs"
+      o: "addr=10.40.0.199,nolock,soft,rw"
+      device: ":/fileshare"
